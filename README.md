@@ -39,7 +39,7 @@ https://developer.mozilla.org/ja/docs/Web/JavaScript/Reference/Global_Objects/Nu
 #### 問題4
 今の仕様では、削除ボタンを押してすぐに参加者が削除されてしまいます。
 
-src/components/MemberAddition.vueを修正し、削除しようとしている参加者の名前を$nameとした時、
+src/components/Members.vueを修正し、削除しようとしている参加者の名前を$nameとした時、
 ```
 $nameさんを削除します。よろしいですか？
 ```
