@@ -74,7 +74,7 @@ src/App.vueを修正して、100円単位で割り勘して端数を計算する
 
 * Aさん：¥400
 * Bさん : ¥400
-* 端数 : ¥181
+* 端��� : ¥181
 
 ### 上級
 
@@ -91,3 +91,88 @@ src/App.vueを修正して、100円単位で割り勘して端数を計算する
 
 ただし、問題３と同じく、
 実行ブラウザはGoogle Chromeを対象にし、その他のブラウザでの稼働は保証しなくても構いません。
+
+## 環境構築とデバッグ手順
+
+### シンガポールリージョン（ap-southeast-1）のAWS Cloud9の場合
+
+#### 環境構築
+##### GitHubからソースをclone
+```bash
+$ git clone https://github.com/tetsuya-zama/warikan-vue.git
+```
+
+##### npm install
+```bash
+$ cd warikan-vue
+$ npm install
+```
+
+#### デバッグ
+##### webpack-dev-serverの立ち上げ
+```bash
+$ npm start
+```
+
+* EC2インスタンス内のlocalhost:8080にwebpack-dev-serverが立ち上がる
+* 立ち上げた状態でソースを更新すると自動的にコンパイルされてブラウザ上も更新される(hot loading)
+* 止める時はターミナルにfocusしてctrl+C
+
+##### Cloud9のPreview機能でデバッグ
+webpack-dev-serverが立ち上がった状態でCloud9の上部メニューの"Preview"->"Preview Running Application"を
+クリックするとデバッグ用のブラウザペインが立ち上がる。
+
+ブラウザペインはかなり小さいので、アドレスバー右横の"Pop up into new window"アイコンをクリックし、
+自分のブラウザの別タブで表示した方が便利
+
+ブラウザペインの右上のxボタンで閉じようとすると、
+ターミナルペインごと消えてしまって復旧が面倒。
+タブ名の横にあるxボタンでタブを閉じること。
+
+間違えてターミナルペインを消してしまった場合は、"Window"->"Tabs"から
+ターミナル名(bash - "ip-xxx-xxx-xxx-xxx"もしくはnpm - "ip-xxx-xxx-xxx-xxx")を
+クリックすると復旧できる。
+
+### シンガポールリージョン以外のAWS Cloud9の場合
+GitHubからcloneしたあと、package.jsonの8行目
+```javascript
+"dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --public ${C9_PID}.vfs.cloud9.ap-southeast-1.amazonaws.com",
+```
+の中の"ap-southeast-1"の部分を使用するリージョンに書き換える。
+
+それ以外はシンガポールリージョンの場合と同様。
+
+### それ以外の環境(自身のローカルマシンなど)の場合
+#### 直接localhost:8080でデバッグする場合
+GitHubからcloneしたあと、package.jsonの8行目
+```javascript
+"dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --public ${C9_PID}.vfs.cloud9.ap-southeast-1.amazonaws.com",
+```
+の中の"--public ${C9_PID}.vfs.cloud9.ap-southeast-1.amazonaws.com"を削除する。
+
+npm installした後、
+```bash
+$ npm start
+```
+でwebpack-dev-serverが立ち上がるので、直接localhost:8080にアクセスしてデバッグする
+
+#### リバースプロキシ配下など、localhost:8080以外でデバッグする場合
+GitHubからcloneしたあと、package.jsonの8行目
+```javascript
+"dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --public ${C9_PID}.vfs.cloud9.ap-southeast-1.amazonaws.com",
+```
+の中の"${C9_PID}.vfs.cloud9.ap-southeast-1.amazonaws.com"を利用するFQDNに書き換える。
+
+npm installした後、
+```bash
+$ npm start
+```
+でwebpack-dev-serverが立ち上がるので、指定したFQDNにアクセスしてデバッグする。
+
+
+
+
+
+
+
+
